@@ -24,6 +24,54 @@ export const dynamic = 'force-dynamic';
 export const GET = lantern();
 ```
 
+## Nuxt (server route)
+
+`server/routes/lamparo.js`:
+
+```js
+import { lantern } from '@lamparo/lantern/node';
+
+const handler = lantern();
+export default defineEventHandler((event) => handler(event.node.req, event.node.res));
+```
+
+## Astro, SvelteKit, Remix / React Router, Hono — anything that speaks fetch
+
+Astro, `src/pages/lamparo.ts` (server output, `prerender = false`); SvelteKit, `src/routes/lamparo/+server.js`;
+Remix, `app/routes/lamparo.ts` (as `loader`):
+
+```js
+import { lantern } from '@lamparo/lantern/fetch';
+
+const handler = lantern();
+export const GET = ({ request }) => handler(request);
+```
+
+## Strapi
+
+`src/api/lamparo/routes/lamparo.js` and its controller — the raw Koa request and response are handed to the
+node adapter:
+
+```js
+// routes/lamparo.js
+module.exports = { routes: [{ method: 'GET', path: '/lamparo', handler: 'lamparo.read', config: { auth: false, prefix: '' } }] };
+
+// controllers/lamparo.js
+const { lantern } = require('@lamparo/lantern/node');
+const handler = lantern();
+module.exports = { read: (ctx) => { ctx.respond = false; handler(ctx.req, ctx.res); } };
+```
+
+## Directus
+
+An endpoint extension named `lamparo` (it answers at `/lamparo`):
+
+```js
+const { lantern } = require('@lamparo/lantern/node');
+
+module.exports = (router) => { router.get('/', lantern()); };
+```
+
 ## Express, or plain `http`
 
 ```js

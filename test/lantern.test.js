@@ -6,6 +6,7 @@ const path = require('node:path');
 const { handle, loadKeys, LANTERN_VERSION } = require('../lib/lantern.js');
 const { lantern: nextLantern } = require('../lib/next.js');
 const { lantern: nodeLantern } = require('../lib/node.js');
+const { lantern: fetchLantern } = require('../lib/fetch.js');
 
 const SECRET = 'a'.repeat(40);
 const ENV = { LAMPARO_KEY_09887C4F: `k_09887c4f:${SECRET}`, PATH: '/usr/bin' };
@@ -125,6 +126,22 @@ test('the node adapter writes head and body on a raw response, honouring origina
     assert.equal(JSON.parse(written.body).key_id, 'k_09887c4f');
     handler({ method: 'GET', url: '/lamparo', headers: {} }, res);
     assert.equal(written.status, 404);
+  } finally {
+    for (const k of Object.keys(ENV)) delete process.env[k];
+    Object.assign(process.env, saved);
+  }
+});
+
+test('the fetch adapter serves Astro, SvelteKit and Remix alike, and the Next.js entry is the same thing', async () => {
+  const handler = fetchLantern({ root: ROOT });
+  const headers = headersFor({ 'x-lamparo-timestamp': String(Math.floor(Date.now() / 1000)) });
+  const saved = { ...process.env };
+  Object.assign(process.env, ENV);
+  try {
+    const res = await handler(new Request('https://astro.example/lamparo', { headers }));
+    assert.equal(res.status, 200);
+    assert.equal((await res.json()).probe_version, LANTERN_VERSION);
+    assert.equal(require('../lib/next.js').lantern, fetchLantern);
   } finally {
     for (const k of Object.keys(ENV)) delete process.env[k];
     Object.assign(process.env, saved);
