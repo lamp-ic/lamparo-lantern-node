@@ -1,0 +1,22 @@
+{
+  "name": "@lamparo/lantern",
+  "version": "0.1.0",
+  "description": "lamparo's lantern for Node: a signed, read-only route that tells lamparo what the site knows about itself.",
+  "license": "MIT",
+  "author": "lamp (https://lamp-ic.fr)",
+  "homepage": "https://lamparo.app",
+  "repository": { "type": "git", "url": "https://github.com/lamp-ic/lamparo-lantern-node.git" },
+  "keywords": ["lamparo", "monitoring", "next", "express", "node"],
+  "engines": { "node": ">=18.18" },
+  "type": "commonjs",
+  "main": "./lib/lantern.js",
+  "types": "./lib/lantern.d.ts",
+  "exports": {
+    ".": { "types": "./lib/lantern.d.ts", "import": "./lib/lantern.mjs", "require": "./lib/lantern.js" },
+    "./next": { "types": "./lib/next.d.ts", "import": "./lib/next.mjs", "require": "./lib/next.js" },
+    "./node": { "types": "./lib/node.d.ts", "import": "./lib/node.mjs", "require": "./lib/node.js" },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "README.md", "LICENSE"],
+  "scripts": { "test": "node --test" }
+}
