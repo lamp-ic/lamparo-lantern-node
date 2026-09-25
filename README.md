@@ -92,6 +92,8 @@ environment. With a `.env.production` file: keep it out of git.
 
 ## What it reads
 
+An npm alias (`compat-react: npm:react@18`) is reported under its real name (`react`), with the local name as `alias`: the registry and the advisories know the real one.
+
 - `runtime`: `node`, its version, `NODE_ENV`, the OS family;
 - `packages`: the `dependencies` of `package.json` (never `devDependencies`), each with the version installed in
   the nearest `node_modules`, or `null` with the declared range when it is not on disk.

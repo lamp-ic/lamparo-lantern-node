@@ -39,6 +39,7 @@ test('a signed request gets the facts, signed back with the same secret', () => 
   assert.equal(payload.facts.runtime.version, process.versions.node);
   assert.deepEqual(payload.facts.packages, [
     { name: '@lamparo/demo', version: '1.2.4', declared: '^1.2.0' },
+    { name: 'react', version: '18.2.0', declared: 'npm:react@18.2.0', alias: 'compat-react' },
     { name: 'next', version: '15.0.3', declared: '15.0.3' },
     { name: 'react', version: null, declared: '^19.0.0' },
   ]);
@@ -146,4 +147,16 @@ test('the fetch adapter serves Astro, SvelteKit and Remix alike, and the Next.js
     for (const k of Object.keys(ENV)) delete process.env[k];
     Object.assign(process.env, saved);
   }
+});
+
+test('an npm alias is reported under its real name, the local name kept as alias', () => {
+  const body = JSON.parse(call().body);
+  const compat = body.facts.packages.find((p) => p.alias === 'compat-react');
+  assert.deepEqual(compat, { name: 'react', version: '18.2.0', declared: 'npm:react@18.2.0', alias: 'compat-react' });
+  assert.equal(body.facts.packages.some((p) => p.name === 'compat-react'), false, 'Le nom local ne va jamais au registre.');
+});
+
+test('the response echoes the request nonce inside the signed body', () => {
+  const body = JSON.parse(call().body);
+  assert.equal(body.nonce, 'abcdefgh12345678');
 });

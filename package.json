@@ -1,13 +1,13 @@
 {
   "name": "@lamparo/lantern",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "lamparo's lantern for Node: a signed, read-only route that tells lamparo what the site knows about itself.",
   "license": "MIT",
   "author": "lamp (https://lamp-ic.fr)",
   "homepage": "https://lamparo.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lamp-ic/lamparo-lantern-node.git"
+    "url": "git+https://github.com/lamp-ic/lamparo-lantern-node.git"
   },
   "keywords": [
     "lamparo",

@@ -1,6 +1,14 @@
 {
   "name": "fixture-app",
   "private": true,
-  "dependencies": { "next": "15.0.3", "react": "^19.0.0", "@lamparo/demo": "^1.2.0", "../evil": "1.0.0" },
-  "devDependencies": { "eslint": "^9.0.0" }
+  "dependencies": {
+    "next": "15.0.3",
+    "react": "^19.0.0",
+    "@lamparo/demo": "^1.2.0",
+    "../evil": "1.0.0",
+    "compat-react": "npm:react@18.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
 }
